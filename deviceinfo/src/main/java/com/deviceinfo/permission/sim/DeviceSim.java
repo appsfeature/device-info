@@ -40,22 +40,27 @@ public class DeviceSim {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("carrier", getCarrier());
-        info.put("country", getCountry());
-        info.put("sim_network_locked", isSimNetworkLocked());
-        //Permission Required
+        try {
+            info.put("carrier", getCarrier());
+            info.put("country", getCountry());
+            info.put("sim_network_locked", isSimNetworkLocked());
+            //Permission Required
 
-        List<SubscriptionInfo> simInfo = getActiveMultiSimInfo(context);
-        info.put("IMEI", getIMEI(context));
-        info.put("IMSI", getIMSI(context));
-        info.put("number_of_active_sim", getNumberOfActiveSim(context));
-        info.put("sim_serial", getSIMSerial(context));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            if(PermissionUtility.isPermissionGranted(context, permission.READ_PHONE_STATE)){
-                info.put("sim_subscription", getSimSubscription(simInfo));
-            }else{
-                info.put("sim_subscription", "Permission Missing (READ_PHONE_STATE)");
+            List<SubscriptionInfo> simInfo = getActiveMultiSimInfo(context);
+            info.put("IMEI", getIMEI(context));
+            info.put("IMSI", getIMSI(context));
+            info.put("number_of_active_sim", getNumberOfActiveSim(context));
+            info.put("sim_serial", getSIMSerial(context));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                if(PermissionUtility.isPermissionGranted(context, permission.READ_PHONE_STATE)){
+                    info.put("sim_subscription", getSimSubscription(simInfo));
+                }else{
+                    info.put("sim_subscription", "Permission Missing (READ_PHONE_STATE)");
+                }
             }
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
         }
 
         DITimeLogger.timeLogging("Sim", startTime);

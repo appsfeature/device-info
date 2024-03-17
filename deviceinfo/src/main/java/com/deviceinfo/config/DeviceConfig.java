@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
 
+import com.deviceinfo.util.DILogger;
 import com.deviceinfo.util.DITimeLogger;
 import com.deviceinfo.util.DIUtility;
 
@@ -30,13 +31,18 @@ public class DeviceConfig {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("current_date",getCurrentDate());
-        info.put("device_ringer_mode", getDeviceRingerMode(context));
-        info.put("formatted_date", getFormattedDate());
-        info.put("formatted_time", getFormattedTime());
-        info.put("formatted_up_time", getFormattedUpTime());
-        info.put("sd_card_available", hasSdCard());
-        info.put("running_on_emulator", isRunningOnEmulator());
+        try {
+            info.put("current_date",getCurrentDate());
+            info.put("device_ringer_mode", getDeviceRingerMode(context));
+            info.put("formatted_date", getFormattedDate());
+            info.put("formatted_time", getFormattedTime());
+            info.put("formatted_up_time", getFormattedUpTime());
+            info.put("sd_card_available", hasSdCard());
+            info.put("running_on_emulator", isRunningOnEmulator());
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("Config", startTime);
         return info;
     }

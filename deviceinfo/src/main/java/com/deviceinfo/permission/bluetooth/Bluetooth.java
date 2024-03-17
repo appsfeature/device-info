@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import com.deviceinfo.util.DILogger;
 import com.deviceinfo.util.DITimeLogger;
 import com.deviceinfo.util.DIUtility;
 import com.deviceinfo.util.PermissionUtility;
@@ -27,10 +28,14 @@ public class Bluetooth {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("has_bluetooth_le", hasBluetoothLeDetail(context));
-
-        //Permission Required
-        info.put("has_bluetooth_le_advertising", hasBluetoothLeAdvertising(context));
+        try {
+            info.put("has_bluetooth_le", hasBluetoothLeDetail(context));
+            //Permission Required
+            info.put("has_bluetooth_le_advertising", hasBluetoothLeAdvertising(context));
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("Bluetooth", startTime);
         return info;
     }

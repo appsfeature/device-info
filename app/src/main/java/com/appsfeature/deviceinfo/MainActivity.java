@@ -1,5 +1,6 @@
 package com.appsfeature.deviceinfo;
 
+import android.Manifest;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +10,6 @@ import android.widget.TextView;
 import com.deviceinfo.DeviceInfo;
 import com.deviceinfo.interfaces.DeviceInfoCallback;
 import com.deviceinfo.model.DeviceInfoResult;
-import com.deviceinfo.util.DILogger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         DeviceInfo.getInstance()
                 .setEnablePermissionRequiredInfo(true)
                 .setDebugMode(true)
+                .setPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .addCallback(new DeviceInfoCallback<DeviceInfoResult>() {
                     @Override
                     public void onSuccess(DeviceInfoResult response) {

@@ -11,10 +11,12 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DeviceInfo {
     private DeviceInfoCallback<DeviceInfoResult> callback;
+    private final List<String> permission = new ArrayList<>();
 
     boolean isEnableApplicationInfo = true;
     boolean isEnableSensorInfo = true;
@@ -39,17 +41,18 @@ public class DeviceInfo {
         this.callback = callback;
         return this;
     }
+
     /**
      * Generate and return in form of JSON of android device information.
      */
     public void fetch(final Context context) {
-        if(callback == null){
+        if (callback == null) {
             DIUtility.showToast(context, "Callback not registered.");
             return;
         }
-        if(!isEnablePermissionRequiredInfo){
+        if (!isEnablePermissionRequiredInfo) {
             executeTask(context);
-        }else {
+        } else {
             checkPermission(context, new DeviceInfoCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean response) {
@@ -66,21 +69,27 @@ public class DeviceInfo {
 
 
     private void checkPermission(Context context, final DeviceInfoCallback<Boolean> callback) {
-        List<String> permission = new ArrayList<>();
-
-        if (PermissionUtility.hasPermissionInManifest(context, Manifest.permission.READ_PHONE_STATE)) {
+        if (!permission.contains(Manifest.permission.READ_PHONE_STATE)
+                && PermissionUtility.hasPermissionInManifest(context, Manifest.permission.READ_PHONE_STATE)) {
             permission.add(Manifest.permission.READ_PHONE_STATE);
         }
 
-        if (PermissionUtility.hasPermissionInManifest(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (!permission.contains(Manifest.permission.ACCESS_COARSE_LOCATION)
+                && PermissionUtility.hasPermissionInManifest(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             permission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
 
-        if (PermissionUtility.hasPermissionInManifest(context, Manifest.permission.BLUETOOTH)) {
+        if (!permission.contains(Manifest.permission.ACCESS_FINE_LOCATION)
+                && PermissionUtility.hasPermissionInManifest(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            permission.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if (!permission.contains(Manifest.permission.BLUETOOTH)
+                && PermissionUtility.hasPermissionInManifest(context, Manifest.permission.BLUETOOTH)) {
             permission.add(Manifest.permission.BLUETOOTH);
         }
 
-        if(permission.size()>0) {
+        if (permission.size() > 0) {
             String[] permissionList = permission.toArray(new String[0]);
             TedPermission.with(context)
                     .setPermissionListener(new PermissionListener() {
@@ -97,7 +106,7 @@ public class DeviceInfo {
                     .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                     .setPermissions(permissionList)
                     .check();
-        }else{
+        } else {
             executeTask(context);
         }
 
@@ -157,6 +166,16 @@ public class DeviceInfo {
 
     public DeviceInfo setDebugMode(Boolean isEnable) {
         this.isDebugMode = isEnable;
+        return this;
+    }
+
+    /**
+     * @param permissions Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION
+     * @return this
+     */
+    public DeviceInfo setPermission(String... permissions) {
+        this.permission.clear();
+        this.permission.addAll(Arrays.asList(permissions));
         return this;
     }
 }

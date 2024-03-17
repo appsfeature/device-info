@@ -29,13 +29,18 @@ public class DeviceDisplay {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("density", getDensity(context));
-        info.put("physical_size", getPhysicalSize());
-        info.put("orientation", getDeviceOrientation(context));
-        info.put("layout_direction", String.valueOf(getLayoutDirection(context)));
-        info.put("resolution", getResolution());
-        info.put("screen_round", String.valueOf(isScreenRound(context)));
-        info.put("refresh_rate", getRefreshRate());
+        try {
+            info.put("density", getDensity(context));
+            info.put("physical_size", getPhysicalSize());
+            info.put("orientation", getDeviceOrientation(context));
+            info.put("layout_direction", String.valueOf(getLayoutDirection(context)));
+            info.put("resolution", getResolution());
+            info.put("screen_round", String.valueOf(isScreenRound(context)));
+            info.put("refresh_rate", getRefreshRate());
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("Display", startTime);
         return info;
     }

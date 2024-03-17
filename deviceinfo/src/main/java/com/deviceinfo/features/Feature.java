@@ -26,9 +26,14 @@ public class Feature {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("nfc", deviceNfc.nfcEnabled());
-        info.put("connected_devices_list", getConnectedDevicesList(context));
-        info.put("multi_touch", checkMultiTouchSupport(context));
+        try {
+            info.put("nfc", deviceNfc.nfcEnabled());
+            info.put("connected_devices_list", getConnectedDevicesList(context));
+            info.put("multi_touch", checkMultiTouchSupport(context));
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("Feature", startTime);
         return info;
     }

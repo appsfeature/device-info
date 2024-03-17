@@ -32,14 +32,17 @@ In your activity class:
       DeviceInfo.getInstance()
               .setEnablePermissionRequiredInfo(true)
               .setDebugMode(true)
+              .setPermission(Manifest.permission.ACCESS_FINE_LOCATION)
               .addCallback(new DeviceInfoCallback<DeviceInfoResult>() {
                   @Override
                   public void onSuccess(DeviceInfoResult response) {
+                      printResponse(response);
                       Log.d("onSuccess",response.toString());
                   }
 
                   @Override
                   public void onError(Exception e) {
+                      tvStatus.setText(e.getMessage());
                       Log.d("onError",e.getMessage());
                   }
               }).fetch(this);
@@ -51,12 +54,13 @@ Add following Permission in your Manifest file if need the following details(Net
 ##Network
 ```xml
     Normal Permission
+        <uses-permission android:name="android.permission.INTERNET" />
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-        <uses-permission android:name="android.permission.INTERNET" />
 
     Runtime Permission
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 ##SIM
 ```xml
@@ -67,6 +71,38 @@ Add following Permission in your Manifest file if need the following details(Net
 ```xml
     Normal Permission
         <uses-permission android:name="android.permission.BLUETOOTH"/>
+```
+##Application
+```xml
+    Normal Permission
+        <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+                tools:ignore="QueryAllPackagesPermission" />
+
+        <queries>
+            <intent>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+            </intent>
+            <intent>
+                <action android:name="android.intent.action.VIEW" />
+                <!-- If you don't know the MIME type in advance, set "mimeType" to "*/*". -->
+                <data android:mimeType="application/pdf" />
+            </intent>
+            <intent>
+                <action android:name="android.intent.action.TTS_SERVICE" />
+            </intent>
+            <intent>
+                <action android:name="android.speech.RecognitionService" />
+            </intent>
+            <intent>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent>
+            <intent>
+                <action android:name="android.intent.action.SENDTO"/>
+                <data android:scheme="smsto" android:host="*" />
+            </intent>
+        </queries>
 ```
 
 

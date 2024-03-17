@@ -30,11 +30,16 @@ public class CPU {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = getCPUInfo();
 
-        info.put("supported_32", getStringSupported32bitABIS());
-        info.put("supported_64", getStringSupported64bitABIS());
-        info.put("supported_ABIS", getStringSupportedABIS());
-        info.put("supported_ABIS_details", Arrays.toString(getSupportedABIS()));
-        info.put("num_of_cores", String.valueOf(getNumCores()));
+        try {
+            info.put("supported_32", getStringSupported32bitABIS());
+            info.put("supported_64", getStringSupported64bitABIS());
+            info.put("supported_ABIS", getStringSupportedABIS());
+            info.put("supported_ABIS_details", Arrays.toString(getSupportedABIS()));
+            info.put("num_of_cores", String.valueOf(getNumCores()));
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("CPU", startTime);
         return info;
     }

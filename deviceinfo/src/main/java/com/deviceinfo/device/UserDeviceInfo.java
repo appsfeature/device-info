@@ -47,38 +47,43 @@ public class UserDeviceInfo {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("android_os_version_name", getOSVersion());
-        info.put("android_base_os_version_name", getBaseOSVersion());
-        info.put("display_version", getDisplayVersion());
-        info.put("build_board", getBoard());
-        info.put("system_boot_loader_version", getBootloader());
-        info.put("brand_name", getBuildBrand());
-        info.put("host", getBuildHost());
-        info.put("build_tags", getBuildTags());
-        info.put("build_user", getBuildUser());
-        info.put("version_code_name", getBuildVersionCodename());
-        info.put("version_incremental", getBuildVersionIncremental());
-        info.put("version_release", getBuildVersionRelease());
-        info.put("build_device", getDevice());
-        info.put("device_unique_fingerprint", getFingerprint());
-        info.put("hardware", getHardware());
-        info.put("language", getLanguage());
-        info.put("manufacturer", getManufacturer());
-        info.put("device_model", getModel());
-        info.put("device_unique_id", getDeviceId(context));
-        info.put("phone_no", getPhoneNo(context)); //required Permission
-        info.put("product", getProduct());
-        info.put("radio_version", getRadioVer());
-        info.put("screen_display_id", getScreenDisplayID(context));
-        info.put("serial", getSerial(context));//required Permission
-        info.put("build_version_sdk", String.valueOf(getBuildVersionSDK()));
-        info.put("device_type", getDeviceType(context));//required Activity
-        info.put("phone_type", getPhoneType());
-        info.put("phone_type_mod", getPhoneTypeModDetail());
-        info.put("build_id", getBuildID());
-        info.put("build_time", DIUtility.formattedDate(getBuildTime()));
-        info.put("orientation", getOrientationDetail(context));
-        info.put("is_device_rooted", isDeviceRooted() + "");
+        try {
+            info.put("android_os_version_name", getOSVersion());
+            info.put("android_base_os_version_name", getBaseOSVersion());
+            info.put("display_version", getDisplayVersion());
+            info.put("build_board", getBoard());
+            info.put("system_boot_loader_version", getBootloader());
+            info.put("brand_name", getBuildBrand());
+            info.put("host", getBuildHost());
+            info.put("build_tags", getBuildTags());
+            info.put("build_user", getBuildUser());
+            info.put("version_code_name", getBuildVersionCodename());
+            info.put("version_incremental", getBuildVersionIncremental());
+            info.put("version_release", getBuildVersionRelease());
+            info.put("build_device", getDevice());
+            info.put("device_unique_fingerprint", getFingerprint());
+            info.put("hardware", getHardware());
+            info.put("language", getLanguage());
+            info.put("manufacturer", getManufacturer());
+            info.put("device_model", getModel());
+            info.put("device_unique_id", getDeviceId(context));
+            info.put("phone_no", getPhoneNo(context)); //required Permission
+            info.put("product", getProduct());
+            info.put("radio_version", getRadioVer());
+            info.put("screen_display_id", getScreenDisplayID(context));
+            info.put("serial", getSerial(context));//required Permission
+            info.put("build_version_sdk", String.valueOf(getBuildVersionSDK()));
+            info.put("device_type", getDeviceType(context));//required Activity
+            info.put("phone_type", getPhoneType());
+            info.put("phone_type_mod", getPhoneTypeModDetail());
+            info.put("build_id", getBuildID());
+            info.put("build_time", DIUtility.formattedDate(getBuildTime()));
+            info.put("orientation", getOrientationDetail(context));
+            info.put("is_device_rooted", isDeviceRooted() + "");
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("Device", startTime);
         return info;
     }

@@ -1,5 +1,7 @@
 package com.deviceinfo.application;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -17,6 +19,7 @@ import com.deviceinfo.util.EasyDeviceInfo;
 import com.deviceinfo.util.DILogger;
 import com.deviceinfo.util.DITimeLogger;
 import com.deviceinfo.util.DIUtility;
+import com.deviceinfo.util.PermissionUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +45,10 @@ public class Application {
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             PackageManager pm = context.getPackageManager();
+            if (!PermissionUtility.hasPermissionInManifest(context, Manifest.permission.QUERY_ALL_PACKAGES)) {
+                throw new Exception("Permission Missing (QUERY_ALL_PACKAGES)");
+            }
+            @SuppressLint("QueryPermissionsNeeded")
             List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
             Collections.sort(activities, new ResolveInfo.DisplayNameComparator(pm));
             for (ResolveInfo ri : activities) {
@@ -127,6 +134,9 @@ public class Application {
         try {
             List<String> granted = new ArrayList<>();
             PackageInfo pi = pm.getPackageInfo(appPackage, PackageManager.GET_ACTIVITIES);
+            if(pi == null || pi.activities == null || pi.activities.length <=0){
+                return "No Activity found.";
+            }
             for (int i = 0; i < pi.activities.length; i++) {
                 ActivityInfo data = pi.activities[i];
                 granted.add(data.name);
@@ -134,7 +144,10 @@ public class Application {
             return TextUtils.join(",", granted);
         } catch (NameNotFoundException e) {
             DILogger.e(DIUtility.ERROR_TAG, e.getMessage());
-            return "";
+            return "" + e.getMessage();
+        } catch (Exception e) {
+            DILogger.e(DIUtility.ERROR_TAG, e.getMessage());
+            return e.getMessage();
         }
     }
 
@@ -214,6 +227,8 @@ public class Application {
             }
             DILogger.e(DIUtility.ERROR_TAG, e.getMessage());
             return e.getMessage();
+        } catch (Exception e){
+            return "" + e.getMessage();
         }
     }
 
@@ -229,6 +244,8 @@ public class Application {
                 DILogger.e(EasyDeviceInfo.nameOfLib, Application.NAME_NOT_FOUND_EXCEPTION, e);
             }
             return e.getMessage();
+        } catch (Exception e){
+            return "" + e.getMessage();
         }
     }
 
@@ -245,6 +262,8 @@ public class Application {
                 DILogger.e(EasyDeviceInfo.nameOfLib, Application.NAME_NOT_FOUND_EXCEPTION, e);
             }
             return e.getMessage();
+        } catch (Exception e){
+            return "" + e.getMessage();
         }
     }
 

@@ -62,17 +62,22 @@ public class Network {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
 
-        // Permission Required
-        info.put("wifi_enabled", isWifiEnabledDetail(context));
-        info.put("mac_address", getMACAddress(context, "wlan0"));
-        info.put("bssid", getWifiBSSID(context));
-        info.put("connection_status", isNetworkAvailable(context));
-        info.put("ip_v4_address", getIPv4Address(context));
-        info.put("ip_v6_address", getIPv6Address(context));
-        info.put("data_type", getDataType(context));
-        info.put("ssid", getWifiSSID(context));
-        info.put("link_speed", getWifiLinkSpeed(context));
-        info.put("cell_tower", loadCellTowerInfo(context));
+        try {
+            // Permission Required
+            info.put("wifi_enabled", isWifiEnabledDetail(context));
+            info.put("mac_address", getMACAddress(context, "wlan0"));
+            info.put("bssid", getWifiBSSID(context));
+            info.put("connection_status", isNetworkAvailable(context));
+            info.put("ip_v4_address", getIPv4Address(context));
+            info.put("ip_v6_address", getIPv6Address(context));
+            info.put("data_type", getDataType(context));
+            info.put("ssid", getWifiSSID(context));
+            info.put("link_speed", getWifiLinkSpeed(context));
+            info.put("cell_tower", loadCellTowerInfo(context));
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
 
         DITimeLogger.timeLogging("Network", startTime);
         return info;
@@ -561,8 +566,8 @@ public class Network {
     @SuppressLint("MissingPermission")
     public String loadCellTowerInfo(Context context) {
         JSONObject networkInfo = new JSONObject();
-        if (!PermissionUtility.hasPermission(context, permission.ACCESS_COARSE_LOCATION)) {
-            return "Permission Missing (ACCESS_COARSE_LOCATION)";
+        if (!PermissionUtility.hasPermission(context, permission.ACCESS_FINE_LOCATION)) {
+            return "Permission Missing (ACCESS_FINE_LOCATION)";
         }
         int lCurrentApiVersion = android.os.Build.VERSION.SDK_INT;
         try {

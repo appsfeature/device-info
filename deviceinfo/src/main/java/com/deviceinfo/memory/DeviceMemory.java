@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.StatFs;
 
+import com.deviceinfo.util.DILogger;
 import com.deviceinfo.util.DITimeLogger;
 import com.deviceinfo.util.DIUtility;
 
@@ -36,15 +37,20 @@ public class DeviceMemory {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("total_internal_memory_size", convertToGbFormatted(getTotalInternalMemorySize()));
-        info.put("available_internal_memory_size", convertToGbFormatted(getAvailableInternalMemorySize()));
-        info.put("total_ram", convertToGbFormatted(getTotalRAM(context)));
-        info.put("total_ram_memory_size", convertToGbFormatted(totalRamMemorySize(context)));
-        info.put("free_ram_memory_size", convertToGbFormatted(freeRamMemorySize(context)));
-        info.put("external_memory_available", externalMemoryAvailable());
-        if(isExternalMemoryAvailable()) {
-            info.put("total_external_memory_size", convertToGbFormatted(getTotalExternalMemorySize()));
-            info.put("available_external_memory_size", convertToGbFormatted(getAvailableExternalMemorySize()));
+        try {
+            info.put("total_internal_memory_size", convertToGbFormatted(getTotalInternalMemorySize()));
+            info.put("available_internal_memory_size", convertToGbFormatted(getAvailableInternalMemorySize()));
+            info.put("total_ram", convertToGbFormatted(getTotalRAM(context)));
+            info.put("total_ram_memory_size", convertToGbFormatted(totalRamMemorySize(context)));
+            info.put("free_ram_memory_size", convertToGbFormatted(freeRamMemorySize(context)));
+            info.put("external_memory_available", externalMemoryAvailable());
+            if(isExternalMemoryAvailable()) {
+                info.put("total_external_memory_size", convertToGbFormatted(getTotalExternalMemorySize()));
+                info.put("available_external_memory_size", convertToGbFormatted(getAvailableExternalMemorySize()));
+            }
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
         }
         DITimeLogger.timeLogging("Memory", startTime);
         return info;

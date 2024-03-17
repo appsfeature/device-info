@@ -21,15 +21,20 @@ public class Battery {
     public HashMap<String, String> getInfo(Context context) {
         long startTime = DITimeLogger.getStartTime();
         HashMap<String, String> info = new HashMap<>();
-        info.put("technology",getBatteryTechnology(context));
-        info.put("temperature",String.valueOf(getBatteryTemperature(context)));
-        info.put("voltage",String.valueOf(getBatteryVoltage(context)));
-        info.put("charging_state",getDeviceChargingState(context));
-        info.put("charging_source",getChargingSource(context));
-        info.put("charging_source_index",getChargingSourceIndexDetail(context));
-        info.put("is_battery_present", String.valueOf(isBatteryPresent(context)));
-        info.put("charged_percentage", String.valueOf(getBatteryPercentage(context)));
-        info.put("health",getBatteryHealth(context));
+        try {
+            info.put("technology",getBatteryTechnology(context));
+            info.put("temperature",String.valueOf(getBatteryTemperature(context)));
+            info.put("voltage",String.valueOf(getBatteryVoltage(context)));
+            info.put("charging_state",getDeviceChargingState(context));
+            info.put("charging_source",getChargingSource(context));
+            info.put("charging_source_index",getChargingSourceIndexDetail(context));
+            info.put("is_battery_present", String.valueOf(isBatteryPresent(context)));
+            info.put("charged_percentage", String.valueOf(getBatteryPercentage(context)));
+            info.put("health",getBatteryHealth(context));
+        } catch (Exception e) {
+            DILogger.e(e.toString());
+            info.put("exception", e.toString());
+        }
         DITimeLogger.timeLogging("Battery", startTime);
         return info;
     }
