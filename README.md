@@ -36,21 +36,19 @@ In your activity class:
               .addCallback(new DeviceInfoCallback<DeviceInfoResult>() {
                   @Override
                   public void onSuccess(DeviceInfoResult response) {
-                      printResponse(response);
                       Log.d("onSuccess",response.toString());
                   }
 
                   @Override
                   public void onError(Exception e) {
-                      tvStatus.setText(e.getMessage());
                       Log.d("onError",e.getMessage());
                   }
               });
 
-      // call this method from background main thread.
+      // call this method from Main thread.
       DeviceInfo.getInstance().fetch(this);
 
-      // call this method from background worker thread.
+      // call this method from Worker thread.
       DIResult result = DeviceInfo.getInstance().fetchEnqueue(this);
 ```
 
