@@ -3,8 +3,12 @@ package com.deviceinfo;
 import android.Manifest;
 import android.content.Context;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.WorkerThread;
+
 import com.deviceinfo.interfaces.DeviceInfoCallback;
 import com.deviceinfo.model.DeviceInfoResult;
+import com.deviceinfo.util.DIResult;
 import com.deviceinfo.util.PermissionUtility;
 import com.deviceinfo.util.DIUtility;
 import com.gun0912.tedpermission.PermissionListener;
@@ -43,8 +47,9 @@ public class DeviceInfo {
     }
 
     /**
-     * Generate and return in form of JSON of android device information.
+     * Generate and return in form of Model of android device information.
      */
+    @MainThread
     public void fetch(final Context context) {
         if (callback == null) {
             DIUtility.showToast(context, "Callback not registered.");
@@ -61,10 +66,20 @@ public class DeviceInfo {
 
                 @Override
                 public void onError(Exception e) {
-
+                    callback.onError(e);
                 }
             });
         }
+    }
+
+    @WorkerThread
+    public DIResult fetchEnqueue(final Context context) {
+        return new DeviceInfoTask().doInBackground(context);
+    }
+
+    @MainThread
+    private void executeTask(Context context) {
+        new DeviceInfoTask(callback).execute(context);
     }
 
 
@@ -110,10 +125,6 @@ public class DeviceInfo {
             executeTask(context);
         }
 
-    }
-
-    private void executeTask(Context context) {
-        new DeviceInfoTask(this, callback).execute(context);
     }
 
     /**

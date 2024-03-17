@@ -17,15 +17,20 @@ import com.deviceinfo.permission.network.Network;
 import com.deviceinfo.permission.sim.DeviceSim;
 import com.deviceinfo.sensors.Sensors;
 import com.deviceinfo.util.DIResult;
+import com.deviceinfo.util.DITaskRunner;
+
+import java.util.concurrent.Callable;
 
 public class DeviceInfoTask {
 
     private final DeviceInfoCallback<DeviceInfoResult> callback;
-    private final DeviceInfo deviceInfo;
 
-    public DeviceInfoTask(DeviceInfo deviceInfo, DeviceInfoCallback<DeviceInfoResult> callback) {
+    public DeviceInfoTask() {
+        this(null);
+    }
+
+    public DeviceInfoTask(DeviceInfoCallback<DeviceInfoResult> callback) {
         this.callback = callback;
-        this.deviceInfo = deviceInfo;
     }
 
     protected DIResult doInBackground(Context context) {
@@ -41,22 +46,22 @@ public class DeviceInfoTask {
                     .setDeviceConfigInfo(new DeviceConfig().getInfo(context))
                     .setDeviceMemoryInfo(new DeviceMemory().getInfo(context));
 
-            if (deviceInfo.isEnableSensorInfo) {
+            if (DeviceInfo.getInstance().isEnableSensorInfo) {
                 jsonResponse.setSensorsInfo(new Sensors(context).getInfo());
             }
-            if (deviceInfo.isEnableApplicationInfo) {
+            if (DeviceInfo.getInstance().isEnableApplicationInfo) {
                 jsonResponse.setApplicationInfo(new Application().getInfo(context));
             }
 
             //permission required
-            if(deviceInfo.isEnablePermissionRequiredInfo) {
-                if (deviceInfo.isEnableBluetoothInfo) {
+            if(DeviceInfo.getInstance().isEnablePermissionRequiredInfo) {
+                if (DeviceInfo.getInstance().isEnableBluetoothInfo) {
                     jsonResponse.setBluetoothInfo(new Bluetooth().getInfo(context));
                 }
-                if (deviceInfo.isEnableNetworkInfo) {
+                if (DeviceInfo.getInstance().isEnableNetworkInfo) {
                     jsonResponse.setNetworkInfo(new Network(context).getInfo(context));
                 }
-                if (deviceInfo.isEnableSIMInfo) {
+                if (DeviceInfo.getInstance().isEnableSIMInfo) {
                     jsonResponse.setDeviceSimInfo(new DeviceSim(context).getInfo(context));
                 }
             }
@@ -68,15 +73,17 @@ public class DeviceInfoTask {
     }
 
     protected void onPostExecute(DIResult result) {
-       if (result.getException() != null) {
-            callback.onError(result.getException());
-        } else {
-            callback.onSuccess(result.getResult());
+        if(callback != null) {
+            if (result.getException() != null) {
+                callback.onError(result.getException());
+            } else {
+                callback.onSuccess(result.getResult());
+            }
         }
     }
 
     public void execute(Context context){
-        onPostExecute(doInBackground(context));
+        DITaskRunner.getInstance().executeAsync(() -> doInBackground(context), this::onPostExecute);
     }
 
 }

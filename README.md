@@ -45,7 +45,13 @@ In your activity class:
                       tvStatus.setText(e.getMessage());
                       Log.d("onError",e.getMessage());
                   }
-              }).fetch(this);
+              });
+
+      // call this method from background main thread.
+      DeviceInfo.getInstance().fetch(this);
+
+      // call this method from background worker thread.
+      DIResult result = DeviceInfo.getInstance().fetchEnqueue(this);
 ```
 
 
