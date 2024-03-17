@@ -35,14 +35,12 @@ In your activity class:
               .addCallback(new DeviceInfoCallback<DeviceInfoResult>() {
                   @Override
                   public void onSuccess(DeviceInfoResult response) {
-                      printResponse(response);
-                      DILogger.d("onSuccess",response.toString());
+                      Log.d("onSuccess",response.toString());
                   }
 
                   @Override
                   public void onError(Exception e) {
-                      tvStatus.setText(e.getMessage());
-                      DILogger.d("onError",e.getMessage());
+                      Log.d("onError",e.getMessage());
                   }
               }).fetch(this);
 ```

@@ -5,9 +5,6 @@ buildscript {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
 
     }
     dependencies {
@@ -22,13 +19,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
-    }
-    ext {
-        retrofit_version = '2.3.0'
-        retrofit_okhttp_version = '3.10.0'
-        firebase_crashlytics_version = '2.9.9'
-        firebase_core = '16.0.8'
     }
 }
 
