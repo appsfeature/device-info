@@ -47,7 +47,7 @@ In your activity class:
 
       // call this method from Main thread.
       DeviceInfo.getInstance().fetch(this);
-
+                       -OR-
       // call this method from Worker thread.
       DIResult result = DeviceInfo.getInstance().fetchEnqueue(this);
 ```
