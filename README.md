@@ -7,33 +7,22 @@ DeviceInfo library gives you details of Hardware & Software configurations of yo
 This detail specifications includes information of CPU, RAM, Storage, OS, Sensors, Core, Battery, Data Network, WiFi, SIM, Bluetooth, Display, Supported features, Manufacturer, Installed Apps.
 
 
-  
-## Setup
-Add the token to $HOME/.gradle/gradle.properties
-``` gradle
-    authToken=jp_65cg6e0t51u6mt3uoif46rva4
-```
-
 Add this to your project build.gradle
 ``` gradle
 allprojects {
     repositories {
         maven {
             url "https://jitpack.io"
-            credentials { username authToken }
         }
-    }
-    ext {
-        firebase_crashlytics_version = '2.9.9' 
     }
 }
 ```
  
 #### Dependency
-[![](https://jitpack.io/v/org.bitbucket.amitresearchdev/DeviceInfo.svg)](https://jitpack.io/#org.bitbucket.amitresearchdev/DeviceInfo)
+[![](https://jitpack.io/v/appsfeature/device-info.svg)](https://jitpack.io/#appsfeature/device-info)
 ```gradle
 dependencies {
-    implementation 'org.bitbucket.amitresearchdev:DeviceInfo:x.y'
+    implementation 'com.github.appsfeature:device-info:x.y'
 }
 ```
 
