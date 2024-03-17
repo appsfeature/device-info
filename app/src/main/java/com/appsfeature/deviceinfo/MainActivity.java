@@ -50,13 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         tvStatus.setText(e.getMessage());
                         Log.d("onError",e.getMessage());
                     }
-                });
-
-        // call this method from background main thread.
-        DeviceInfo.getInstance().fetch(this);
-
-        // call this method from background worker thread.
-        DIResult result = DeviceInfo.getInstance().fetchEnqueue(this);
+                }).fetch(this);
     }
 
     private void printResponse(DeviceInfoResult response) {
