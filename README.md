@@ -29,20 +29,22 @@ dependencies {
 #### Usage method
 In your activity class:
 ```java 
-      DeviceInfo.newInstance(this)
-          .disableBluetoothDetails()
-          .disableApplicationDetails()
-          .addCallback(new Callback<JSONObject>() {
-              @Override
-              public void onSuccess(JSONObject response) {
-                  Logger.d("onSuccess",response.toString());
-              }
+      DeviceInfo.getInstance()
+              .setEnablePermissionRequiredInfo(true)
+              .setDebugMode(true)
+              .addCallback(new DeviceInfoCallback<DeviceInfoResult>() {
+                  @Override
+                  public void onSuccess(DeviceInfoResult response) {
+                      printResponse(response);
+                      DILogger.d("onSuccess",response.toString());
+                  }
 
-              @Override
-              public void onError(Exception e) {
-                  Logger.d("onError",e.getMessage());
-              }
-          }).fetch();
+                  @Override
+                  public void onError(Exception e) {
+                      tvStatus.setText(e.getMessage());
+                      DILogger.d("onError",e.getMessage());
+                  }
+              }).fetch(this);
 ```
 
 
