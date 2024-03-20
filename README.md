@@ -55,7 +55,7 @@ In your activity class:
 
 #### Permissions Required
 Add following Permission in your Manifest file if need the following details(Network, SIM, Bluetooth).
-##Network
+## Network
 ```xml
     Normal Permission
         <uses-permission android:name="android.permission.INTERNET" />
@@ -66,17 +66,17 @@ Add following Permission in your Manifest file if need the following details(Net
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
-##SIM
+## SIM
 ```xml
     Runtime Permission
         <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 ```
-##Bluetooth
+## Bluetooth
 ```xml
     Normal Permission
         <uses-permission android:name="android.permission.BLUETOOTH"/>
 ```
-##Application
+## Application
 ```xml
     Normal Permission
         <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -112,7 +112,7 @@ Add following Permission in your Manifest file if need the following details(Net
 
 Device Info provides following information of your Android device which grouped as below.
 
-##Android Device Information
+## Android Device Information
 ```  
 android os version name
 display version
@@ -138,7 +138,7 @@ phone type
 build id
 build time
 ```
-##Battery
+## Battery
 ```
 technology
 temperature
@@ -148,7 +148,7 @@ charging source
 charged percentage
 health
 ```
-##Sensor
+## Sensor
 ```
 (Accelerometer, Gyroscope, Pedometer, Magnetometer, Step detector, Gravity, Motion, Rotation, Tilt, Gesture, Wakeup)
 Available information regarding each sensor:
@@ -156,7 +156,7 @@ Sensor Name
 Vendor
 Version
 ```
-##CPU
+## CPU
 ```
 supported 32
 supported 64
@@ -165,7 +165,7 @@ supported ABIS details
 num of cores
 details
 ```
-##Network
+## Network
 ```
 wifi enabled
 bssid
@@ -177,7 +177,7 @@ ssid
 link speed
 cell tower
 ```
-##SIM
+## SIM
 ```
 carrier
 country
@@ -188,7 +188,7 @@ number of active sim
 sim serial
 sim subscription
 ```
-##Storage
+## Storage
 ```
 total ram
 external memory available
@@ -197,12 +197,12 @@ available internal memory size
 total external memory size
 available external memory size
 ```
-##Bluetooth
+## Bluetooth
 ```
 has bluetooth le
 has bluetooth le advertising
 ```
-##Display
+## Display
 ```
 density
 physical size
@@ -211,7 +211,7 @@ resolution
 screen round
 refresh rate
 ```
-##Features
+## Features
 ```
 nfc
 connected devices list
@@ -433,3 +433,10 @@ multi touch
   ]
 }
 ```
+
+
+## ChangeLog
+
+#### Version 1.01:
+* Initial build
+* compileSdkVersion 30, Java Version 1.8
